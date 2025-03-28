@@ -13,9 +13,9 @@ public class MyConfig {
 //    后端域名
     public static String DOMAIN = "172.18.0.9";
 //    音乐后端地址
-//    public static String SERVER_URL_API = "http://" + DOMAIN + ":3000";
+    public static String SERVER_URL_API = "http://" + DOMAIN + ":3000";
 //    测试地址
-    public static String SERVER_URL_API = "https://chrelyonly-music-system.frp.chrelyonly.cn";
+//    public static String SERVER_URL_API = "https://chrelyonly-music-system.frp.chrelyonly.cn";
 //    {
 //        "code": 200,
 //            "data": {
