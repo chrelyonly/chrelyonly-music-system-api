@@ -18,12 +18,12 @@ public class SendRequest {
      * @param apiUrl  /xxx
      * @param json json对象
      */
-    public static JSONObject sendRequest(String apiUrl, JSONObject json,Method method) {
+    public static JSONObject sendRequest(String apiUrl,JSONObject body,Method method) {
         // 发送请求并获取响应
         try(HttpResponse execute = HttpRequest
                 .of(MyConfig.SERVER_URL_API + apiUrl)
                 .method(method)
-                .body(json.toJSONString())
+                .body(body.toJSONString())
                 .execute()){
             return JSONObject.parseObject(execute.body());
         } catch (Exception e) {
