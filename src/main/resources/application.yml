@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: chrelyonly-music-system-api
+server:
+  port: 30080
