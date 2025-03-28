@@ -3,6 +3,7 @@ package cn.chrelyonly.chrelyonlymusicsystemapi.controller;
 import cn.chrelyonly.chrelyonlymusicsystemapi.component.R;
 import cn.chrelyonly.chrelyonlymusicsystemapi.service.LoginService;
 import cn.chrelyonly.chrelyonlymusicsystemapi.service.UserInfoService;
+import cn.chrelyonly.chrelyonlymusicsystemapi.service.VipService;
 import com.alibaba.fastjson2.JSONObject;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class MusicApiController {
     private final LoginService loginService;
     private final UserInfoService userInfoService;
+    private final VipService vipService;
 
     /**
      * 手机号登录 步骤1
@@ -42,12 +44,21 @@ public class MusicApiController {
         return R.data(cellphone);
     }
     /**
-     * 获取手机验证码 步骤2
+     * 获取用户信息
      * @return json
      */
     @RequestMapping("/userDetail")
     public R userDetail(){
         JSONObject cellphone = userInfoService.userDetail();
         return R.data(cellphone);
+    }
+    /**
+     * 领取vip
+     * @return json
+     */
+    @RequestMapping("/youthDayVip")
+    public R youthDayVip(){
+        JSONObject youthDayVip = vipService.youthDayVip();
+        return R.data(youthDayVip);
     }
 }
