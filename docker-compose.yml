@@ -1,0 +1,24 @@
+services:
+  chrelyonly-music-system-api:
+    build:
+      dockerfile: Dockerfile
+    container_name: chrelyonly-music-system-api
+    networks:
+      - my-network
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /www/dk_project/dk_app/chrelyonly-music-system-api/app:/app
+    working_dir: /app
+    ports:
+      - "30080:30080"
+    dns:
+      - 114.114.114.114
+      - 1.1.1.1  # Cloudflare DNS
+    # 运行应用
+#    command: ["sh", "-c", "tail -f /dev/null"]
+    command: java -jar /app/app.jar
+networks:
+  my-network:
+    name: wechat-api
+    enable_ipv6: true
+    driver: bridge
