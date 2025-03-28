@@ -24,7 +24,7 @@ public class UserInfoService {
         JSONObject body = new JSONObject();
         // 拼接 URL 参数
         String path = "/user/detail";
-        JSONObject responseBody = SendRequest.sendRequest(path, body, Method.POST);
+        JSONObject responseBody = SendRequest.sendRequest(path, body, Method.GET);
         log.info(responseBody.toJSONString());
         return responseBody;
     }

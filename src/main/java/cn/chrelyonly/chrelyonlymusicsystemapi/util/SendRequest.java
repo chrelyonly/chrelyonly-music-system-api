@@ -20,10 +20,13 @@ public class SendRequest {
      */
     public static JSONObject sendRequest(String apiUrl,JSONObject body,Method method) {
         // 发送请求并获取响应
-        try(HttpResponse execute = HttpRequest
-                .of(MyConfig.SERVER_URL_API + apiUrl)
-                .method(method)
-                .body(body.toJSONString())
+        HttpRequest httpRequest;
+        if (method == Method.GET){
+            httpRequest = HttpRequest.get(MyConfig.SERVER_URL_API + apiUrl);
+        }else{
+            httpRequest = HttpRequest.post(MyConfig.SERVER_URL_API + apiUrl).body(body.toJSONString());
+        }
+        try(HttpResponse execute = httpRequest
                 .execute()){
             return JSONObject.parseObject(execute.body());
         } catch (Exception e) {
