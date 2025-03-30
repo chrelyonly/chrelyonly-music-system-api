@@ -36,17 +36,23 @@ public class MusicOpenApiController {
         JSONArray musicList = searchMusic.getJSONObject("data").getJSONArray("lists");
         for (Object object : musicList) {
             JSONObject music = (JSONObject) object;
-            String hash = music.getJSONObject("HQ").getString("Hash");
-            JSONObject songUrl = musicService.songUrl(hash);
-            JSONArray url = songUrl.getJSONArray("url");
-            musicListRes.add(new JSONObject(){{
+            try {
+                String hash = music.getJSONObject("HQ").getString("Hash");
+                JSONObject songUrl = musicService.songUrl(hash);
+                JSONArray url = songUrl.getJSONArray("url");
+                musicListRes.add(new JSONObject(){{
 //                填充图片
-                put("image",music.getString("Image"));
+                    put("image",music.getString("Image"));
 //                作者
-                put("singerName",music.getString("SingerName"));
+                    put("singerName",music.getString("SingerName"));
 //                音乐地址
-                put("musicUrl",url);
-            }});
+                    put("musicUrl",url);
+                }});
+            }catch (Exception e){
+                log.error("获取音乐信息失败");
+                log.info(music.toJSONString());
+                log.error(e.getMessage());
+            }
         }
 
         return R.data(musicListRes);
