@@ -1,6 +1,7 @@
 package cn.chrelyonly.chrelyonlymusicsystemapi.controller;
 
 import cn.chrelyonly.chrelyonlymusicsystemapi.component.R;
+import cn.chrelyonly.chrelyonlymusicsystemapi.config.MyConfig;
 import cn.chrelyonly.chrelyonlymusicsystemapi.service.LoginService;
 import cn.chrelyonly.chrelyonlymusicsystemapi.service.UserInfoService;
 import cn.chrelyonly.chrelyonlymusicsystemapi.service.VipService;
@@ -41,6 +42,16 @@ public class MusicApiController {
     @RequestMapping("/captchaSent")
     public R captchaSent(){
         JSONObject cellphone = loginService.captchaSent();
+        return R.data(cellphone);
+    }
+
+    /**
+     * 获取手机验证码 步骤2
+     * @return json
+     */
+    @RequestMapping("/loginToken")
+    public R loginToken(){
+        JSONObject cellphone = loginService.loginToken(MyConfig.USER_ID,MyConfig.TOKEN);
         return R.data(cellphone);
     }
     /**
