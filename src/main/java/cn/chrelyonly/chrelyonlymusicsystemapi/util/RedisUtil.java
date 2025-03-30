@@ -34,8 +34,6 @@ public class RedisUtil {
         this.redisTemplate = redisTemplate;
         redisTemplateStatic = this.redisTemplate;
         log.info("初始化了静态变量");
-        RedisUtil.setObjectStatic("test", "test", 10L);
-        System.out.println("RedisUtil.getKey(\"test\") = " + RedisUtil.getKey("test"));
     }
     /**
      * 存储redis缓存

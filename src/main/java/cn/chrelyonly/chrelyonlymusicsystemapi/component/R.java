@@ -2,7 +2,10 @@ package cn.chrelyonly.chrelyonlymusicsystemapi.component;
 
 
 import com.alibaba.fastjson2.JSONObject;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 import java.io.Serializable;
 
@@ -10,7 +13,10 @@ import java.io.Serializable;
  * @author chrelyonly
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class R<T> implements Serializable {
+
 
     private int code = 200;
     private boolean success = true;
