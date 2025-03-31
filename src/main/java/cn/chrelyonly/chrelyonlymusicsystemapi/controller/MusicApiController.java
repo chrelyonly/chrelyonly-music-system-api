@@ -46,7 +46,7 @@ public class MusicApiController {
     }
 
     /**
-     * 获取手机验证码 步骤2
+     * 刷新登录token
      * @return json
      */
     @RequestMapping("/loginToken")
