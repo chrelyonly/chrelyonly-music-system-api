@@ -37,7 +37,9 @@ public class MusicOpenApiController {
         for (Object object : musicList) {
             JSONObject music = (JSONObject) object;
             try {
-                String hash = music.getJSONObject("HQ").getString("Hash");
+                String sqFileHash = music.getString("SQFileHash");
+                String fileHash = music.getString("FileHash");
+                String hash = sqFileHash.isEmpty() ? fileHash : sqFileHash;
                 JSONObject songUrl = musicService.songUrl(hash);
                 JSONArray url = songUrl.getJSONArray("url");
                 musicListRes.add(new JSONObject(){{
