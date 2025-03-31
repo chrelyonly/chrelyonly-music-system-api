@@ -47,6 +47,9 @@ public class MusicOpenApiController {
                 }
                 JSONObject songUrl = musicService.songUrl(hash);
                 JSONArray url = songUrl.getJSONArray("url");
+                if (StrUtil.isBlankIfStr(url.toJSONString())) {
+                    continue;
+                }
                 musicListRes.add(new JSONObject(){{
 //                填充图片
                     put("image",music.getString("Image"));
