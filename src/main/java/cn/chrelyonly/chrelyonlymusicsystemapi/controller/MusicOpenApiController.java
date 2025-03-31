@@ -4,6 +4,7 @@ import cn.chrelyonly.chrelyonlymusicsystemapi.aop.FastRedisReturnData;
 import cn.chrelyonly.chrelyonlymusicsystemapi.component.R;
 import cn.chrelyonly.chrelyonlymusicsystemapi.service.LoginService;
 import cn.chrelyonly.chrelyonlymusicsystemapi.service.MusicService;
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import lombok.RequiredArgsConstructor;
@@ -39,7 +40,7 @@ public class MusicOpenApiController {
             try {
                 String sqFileHash = music.getString("SQFileHash");
                 String fileHash = music.getString("FileHash");
-                String hash = sqFileHash.isEmpty() ? fileHash : sqFileHash;
+                String hash = StrUtil.isBlankIfStr(sqFileHash) ? fileHash : sqFileHash;
                 JSONObject songUrl = musicService.songUrl(hash);
                 JSONArray url = songUrl.getJSONArray("url");
                 musicListRes.add(new JSONObject(){{
