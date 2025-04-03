@@ -27,7 +27,7 @@ public class MusicQqOpenApiController {
      * 搜索API
      * @return json
      */
-//    @FastRedisReturnData(redisTime = 60 * 60 * 24 * 30)
+    @FastRedisReturnData(redisTime = 60 * 60 * 24 * 30)
     @RequestMapping("/searchMusic")
     public R searchMusic(@RequestParam String keywords){
         JSONArray musicListRes = new JSONArray();
