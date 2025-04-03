@@ -1,6 +1,7 @@
-package cn.chrelyonly.chrelyonlymusicsystemapi.service;
+package cn.chrelyonly.chrelyonlymusicsystemapi.kg.service;
 
-import cn.chrelyonly.chrelyonlymusicsystemapi.util.SendRequest;
+
+import cn.chrelyonly.chrelyonlymusicsystemapi.kg.util.SendRequest;
 import cn.hutool.http.Method;
 import com.alibaba.fastjson2.JSONObject;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +15,7 @@ import java.nio.charset.StandardCharsets;
  */
 @Service
 @Slf4j
-public class MusicService {
+public class MusicKgService {
 
     /**
      * 搜索音乐

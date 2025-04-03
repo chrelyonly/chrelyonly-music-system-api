@@ -1,8 +1,8 @@
-package cn.chrelyonly.chrelyonlymusicsystemapi.task;
+package cn.chrelyonly.chrelyonlymusicsystemapi.kg.task;
 
-import cn.chrelyonly.chrelyonlymusicsystemapi.config.MyConfig;
-import cn.chrelyonly.chrelyonlymusicsystemapi.service.LoginService;
-import cn.chrelyonly.chrelyonlymusicsystemapi.service.VipService;
+import cn.chrelyonly.chrelyonlymusicsystemapi.kg.config.MyConfig;
+import cn.chrelyonly.chrelyonlymusicsystemapi.kg.service.LoginService;
+import cn.chrelyonly.chrelyonlymusicsystemapi.kg.service.VipService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
  * @author chrelyonly
  * 重写异常处理
  */
-@RestControllerAdvice(basePackages = "cn.chrelyonly.chrelyonlymusicsystemapi.controller")
+@RestControllerAdvice(basePackages = "cn.chrelyonly.chrelyonlymusicsystemapi")
 @Slf4j
 @RestController
 @RequestMapping("${server.error.path:${error.path:/error}}")

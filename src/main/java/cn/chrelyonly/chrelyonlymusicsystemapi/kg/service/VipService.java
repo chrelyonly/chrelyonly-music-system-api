@@ -1,29 +1,26 @@
-package cn.chrelyonly.chrelyonlymusicsystemapi.service;
+package cn.chrelyonly.chrelyonlymusicsystemapi.kg.service;
 
-import cn.chrelyonly.chrelyonlymusicsystemapi.config.MyConfig;
-import cn.chrelyonly.chrelyonlymusicsystemapi.util.SendRequest;
+
+import cn.chrelyonly.chrelyonlymusicsystemapi.kg.util.SendRequest;
 import cn.hutool.http.Method;
 import com.alibaba.fastjson2.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 
 /**
  * @author 11725
  */
 @Service
 @Slf4j
-public class UserInfoService {
+public class VipService {
 
     /**
-     * 1.手机登录
+     * 领取vip 一天领取一次
      */
-    public JSONObject userDetail() {
+    public JSONObject youthDayVip() {
         JSONObject body = new JSONObject();
         // 拼接 URL 参数
-        String path = "/user/detail";
+        String path = "/youth/day/vip";
         JSONObject responseBody = SendRequest.sendRequest(path, body, Method.GET);
         log.info(responseBody.toJSONString());
         return responseBody;

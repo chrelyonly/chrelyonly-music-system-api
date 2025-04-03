@@ -1,6 +1,7 @@
-package cn.chrelyonly.chrelyonlymusicsystemapi.util;
+package cn.chrelyonly.chrelyonlymusicsystemapi.qq.util;
 
-import cn.chrelyonly.chrelyonlymusicsystemapi.config.MyConfig;
+import cn.chrelyonly.chrelyonlymusicsystemapi.kg.config.MyConfig;
+import cn.chrelyonly.chrelyonlymusicsystemapi.qq.config.MyQqConfig;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.Method;
@@ -10,7 +11,7 @@ import com.alibaba.fastjson2.JSONObject;
  * 发送请求
  * @author 11725
  */
-public class SendRequest {
+public class SendQqRequest {
 
 
     /**
@@ -22,9 +23,9 @@ public class SendRequest {
         // 发送请求并获取响应
         HttpRequest httpRequest;
         if (method == Method.GET){
-            httpRequest = HttpRequest.get(MyConfig.SERVER_URL_API + apiUrl);
+            httpRequest = HttpRequest.get(MyQqConfig.SERVER_URL_API + apiUrl);
         }else{
-            httpRequest = HttpRequest.post(MyConfig.SERVER_URL_API + apiUrl).body(body.toJSONString());
+            httpRequest = HttpRequest.post(MyQqConfig.SERVER_URL_API + apiUrl).body(body.toJSONString());
         }
         try(HttpResponse execute = httpRequest
                 .execute()){

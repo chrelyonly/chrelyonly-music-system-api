@@ -1,10 +1,10 @@
-package cn.chrelyonly.chrelyonlymusicsystemapi.controller;
+package cn.chrelyonly.chrelyonlymusicsystemapi.kg.controller;
 
 import cn.chrelyonly.chrelyonlymusicsystemapi.component.R;
-import cn.chrelyonly.chrelyonlymusicsystemapi.config.MyConfig;
-import cn.chrelyonly.chrelyonlymusicsystemapi.service.LoginService;
-import cn.chrelyonly.chrelyonlymusicsystemapi.service.UserInfoService;
-import cn.chrelyonly.chrelyonlymusicsystemapi.service.VipService;
+import cn.chrelyonly.chrelyonlymusicsystemapi.kg.config.MyConfig;
+import cn.chrelyonly.chrelyonlymusicsystemapi.kg.service.LoginService;
+import cn.chrelyonly.chrelyonlymusicsystemapi.kg.service.UserInfoService;
+import cn.chrelyonly.chrelyonlymusicsystemapi.kg.service.VipService;
 import com.alibaba.fastjson2.JSONObject;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/music-api")
-public class MusicApiController {
+@RequestMapping("/music-kg-api")
+public class MusicKgApiController {
     private final LoginService loginService;
     private final UserInfoService userInfoService;
     private final VipService vipService;

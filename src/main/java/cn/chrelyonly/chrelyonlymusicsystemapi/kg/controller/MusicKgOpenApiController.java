@@ -1,9 +1,9 @@
-package cn.chrelyonly.chrelyonlymusicsystemapi.controller;
+package cn.chrelyonly.chrelyonlymusicsystemapi.kg.controller;
 
 import cn.chrelyonly.chrelyonlymusicsystemapi.aop.FastRedisReturnData;
 import cn.chrelyonly.chrelyonlymusicsystemapi.component.R;
-import cn.chrelyonly.chrelyonlymusicsystemapi.service.LoginService;
-import cn.chrelyonly.chrelyonlymusicsystemapi.service.MusicService;
+import cn.chrelyonly.chrelyonlymusicsystemapi.kg.service.MusicKgService;
+import cn.chrelyonly.chrelyonlymusicsystemapi.qq.service.MusicQqService;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
@@ -19,9 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/music-open-api")
-public class MusicOpenApiController {
-    private final MusicService musicService;
+@RequestMapping("/music-kg-open-api")
+public class MusicKgOpenApiController {
+    private final MusicKgService musicService;
 
     /**
      * 搜索API

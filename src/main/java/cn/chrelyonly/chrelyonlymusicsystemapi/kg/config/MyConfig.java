@@ -1,4 +1,4 @@
-package cn.chrelyonly.chrelyonlymusicsystemapi.config;
+package cn.chrelyonly.chrelyonlymusicsystemapi.kg.config;
 
 import org.springframework.context.annotation.Configuration;
 
