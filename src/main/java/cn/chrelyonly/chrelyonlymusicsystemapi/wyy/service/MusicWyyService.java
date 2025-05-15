@@ -20,6 +20,7 @@ import java.nio.charset.StandardCharsets;
 public class MusicWyyService {
 
     //    登录key
+    private final String KEY = "wyy:login:key";
     private final String COOKIE_KEY = "wyy:login:cookie";
     private final String USER_INFO_KEY = "wyy:login:userInfo";
 
@@ -50,6 +51,7 @@ public class MusicWyyService {
         var keyStatic = RedisUtil.hasKeyStatic(COOKIE_KEY);
         if (keyStatic){
             return new JSONObject(){{
+               put("code", 201);
                put("message", "当前已经登录");
             }};
         }
@@ -66,6 +68,8 @@ public class MusicWyyService {
 //        如何二维码信息没问题则把key单独返回
         if (qrInfo.getInteger("code") == 200){
             qrInfo.put("qrKey", qrKey);
+//            保存二维码key,方便登录
+            RedisUtil.setObjectStatic(KEY,qrKey,120);
             return qrInfo;
         }else {
             return new JSONObject(){{
@@ -78,16 +82,24 @@ public class MusicWyyService {
     /**
      * 检查登录
      */
-    public JSONObject loginCheck(String qrKey) {
+    public Object loginCheck() {
         var keyStatic = RedisUtil.hasKeyStatic(COOKIE_KEY);
         if (keyStatic){
             return new JSONObject(){{
+                put("code", 201);
                 put("message", "当前已经登录");
             }};
         }
-//        生成二维码
+        var qrKeyFlag = RedisUtil.hasKeyStatic(KEY);
+        if (!qrKeyFlag){
+            return new JSONObject(){{
+                put("code", 500);
+                put("message", "请先扫描二维码后在登陆");
+            }};
+        }
+//        检查登录
         String loginQr = "/login/qr/check" +
-                "?key=" + URLEncoder.encode(qrKey, StandardCharsets.UTF_8) +
+                "?key=" + URLEncoder.encode((String) RedisUtil.getKey(KEY), StandardCharsets.UTF_8) +
                 "&noCookie=true";
         JSONObject response = prependSendRequest(loginQr, null, Method.GET);
 //        判断是否登录成功 803是登陆成功
@@ -96,6 +108,8 @@ public class MusicWyyService {
             RedisUtil.setObjectStatic(COOKIE_KEY,response.getString("cookie"),60 * 60 * 24 * 30 * 12);
 //           删除上一次的登录用户信息
             RedisUtil.deleteKey(USER_INFO_KEY);
+//            登陆成功后调用一次获取用户信息
+            return userAccount();
         }
         return response;
     }
@@ -107,6 +121,7 @@ public class MusicWyyService {
         var keyStatic = RedisUtil.hasKeyStatic(COOKIE_KEY);
         if (!keyStatic){
             return new JSONObject(){{
+                put("code", 500);
                 put("message", "未登录");
             }};
         }

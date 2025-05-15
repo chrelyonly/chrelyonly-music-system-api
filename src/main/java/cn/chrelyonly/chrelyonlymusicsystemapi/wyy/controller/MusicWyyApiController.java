@@ -38,15 +38,15 @@ public class MusicWyyApiController {
      * @return json
      */
     @RequestMapping("/loginCheck")
-    public R loginCheck(@RequestParam String key){
-        JSONObject loginCheck = musicWyyService.loginCheck(key);
-        return R.data(loginCheck);
+    public R loginCheck(){
+        return R.data(musicWyyService.loginCheck());
     }
 
     /**
      * 获取登录信息包括会员
      * @return json
      */
+    @FastRedisReturnData(redisTime = 60)
     @RequestMapping("/userAccount")
     public R userAccount(){
         return R.data(musicWyyService.userAccount());
