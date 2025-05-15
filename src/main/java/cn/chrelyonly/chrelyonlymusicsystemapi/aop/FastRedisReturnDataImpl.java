@@ -44,7 +44,7 @@ public class FastRedisReturnDataImpl {
 			}
 			String keyParameter = url + "/" + parameter;
             log.info("传参转换 = {}", map);
-			String key = "fast:return::Data::music" + keyParameter;
+			String key = "fast:return:Data:music:" + keyParameter;
 			if (Boolean.TRUE.equals(RedisUtil.hasKeyStatic(key))) {
 				log.info("当前缓存Key:{}", key);
 				log.info("剩余时间:{}", RedisUtil.getExpireStatic(key));

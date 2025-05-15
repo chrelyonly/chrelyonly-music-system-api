@@ -1,8 +1,7 @@
 package cn.chrelyonly.chrelyonlymusicsystemapi.qq.service;
 
 
-import cn.chrelyonly.chrelyonlymusicsystemapi.kg.util.SendRequest;
-import cn.chrelyonly.chrelyonlymusicsystemapi.qq.util.SendQqRequest;
+import cn.chrelyonly.chrelyonlymusicsystemapi.util.SendRequest;
 import cn.hutool.http.Method;
 import com.alibaba.fastjson2.JSONObject;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +25,7 @@ public class MusicQqService {
         // 拼接 URL 参数
         String path = "/getSearchByKey" +
                 "?key=" + URLEncoder.encode(key, StandardCharsets.UTF_8);
-        JSONObject responseBody = SendQqRequest.sendRequest(path, body, Method.GET);
+        JSONObject responseBody = SendRequest.sendRequest(path, body, Method.GET);
         log.info(responseBody.toJSONString());
         return responseBody;
     }
@@ -38,7 +37,7 @@ public class MusicQqService {
         // 拼接 URL 参数
         String path = "/getMusicPlay" +
                 "?songmid=" + URLEncoder.encode(songmid, StandardCharsets.UTF_8);
-        JSONObject responseBody = SendQqRequest.sendRequest(path, body, Method.GET);
+        JSONObject responseBody = SendRequest.sendRequest(path, body, Method.GET);
         log.info(responseBody.toJSONString());
         return responseBody;
     }

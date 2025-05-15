@@ -5,3 +5,7 @@ spring:
       database: 1
       host: 192.168.227.130
       port: 6379
+
+music:
+  wyy:
+    serviceUrl: "http://chrelyonly-wyy-music-system:3000"

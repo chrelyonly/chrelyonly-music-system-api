@@ -2,7 +2,7 @@ package cn.chrelyonly.chrelyonlymusicsystemapi.kg.service;
 
 
 import cn.chrelyonly.chrelyonlymusicsystemapi.kg.config.MyConfig;
-import cn.chrelyonly.chrelyonlymusicsystemapi.kg.util.SendRequest;
+import cn.chrelyonly.chrelyonlymusicsystemapi.util.SendRequest;
 import cn.hutool.http.Method;
 import com.alibaba.fastjson2.JSONObject;
 import lombok.extern.slf4j.Slf4j;
