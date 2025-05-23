@@ -140,7 +140,7 @@ public class MusicWyyService {
             JSONObject userVipInfo = prependSendRequest(userVip, null, Method.GET);
             userAccountInfo.put("userVipInfo", userVipInfo);
 //            登录成功则缓存信息 1天
-            RedisUtil.setObjectStatic(USER_INFO_KEY,userAccountInfo,60 * 60 * 24);
+            RedisUtil.setObjectStatic(USER_INFO_KEY,userAccountInfo,60 * 60 * 24 * 30 * 12);
         }
         return userAccountInfo;
     }

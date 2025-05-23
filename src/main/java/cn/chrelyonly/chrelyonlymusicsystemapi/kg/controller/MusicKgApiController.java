@@ -1,10 +1,10 @@
 package cn.chrelyonly.chrelyonlymusicsystemapi.kg.controller;
 
+import cn.chrelyonly.chrelyonlymusicsystemapi.aop.FastRedisReturnData;
 import cn.chrelyonly.chrelyonlymusicsystemapi.component.R;
-import cn.chrelyonly.chrelyonlymusicsystemapi.kg.config.MyConfig;
-import cn.chrelyonly.chrelyonlymusicsystemapi.kg.service.LoginService;
-import cn.chrelyonly.chrelyonlymusicsystemapi.kg.service.UserInfoService;
-import cn.chrelyonly.chrelyonlymusicsystemapi.kg.service.VipService;
+import cn.chrelyonly.chrelyonlymusicsystemapi.kg.service.MusicKgLoginService;
+import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,38 +20,36 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/music-kg-api")
 public class MusicKgApiController {
-    private final LoginService loginService;
-    private final UserInfoService userInfoService;
-    private final VipService vipService;
 
+    private final MusicKgLoginService loginService;
     /**
-     * 手机号登录 步骤1
-     * @param code 验证码
+     * 获取登录二维码
      * @return json
      */
-    @RequestMapping("/cellphone")
-    public R cellphone(@RequestParam String code){
-        JSONObject cellphone = loginService.cellphone(code);
-        return R.data(cellphone);
+    @RequestMapping("/loginQr")
+    public R loginQr(){
+        JSONObject loginQr = loginService.loginQr();
+        return R.data(loginQr);
     }
 
     /**
-     * 获取手机验证码 步骤2
+     * 二维码检测扫码状态接口
      * @return json
      */
-    @RequestMapping("/captchaSent")
-    public R captchaSent(){
-        JSONObject cellphone = loginService.captchaSent();
-        return R.data(cellphone);
+    @RequestMapping("/loginCheck")
+    public R loginCheck(){
+        return R.data(loginService.loginCheck());
     }
+
+
 
     /**
      * 刷新登录token
      * @return json
      */
-    @RequestMapping("/loginToken")
-    public R loginToken(){
-        JSONObject cellphone = loginService.loginToken(MyConfig.USER_ID,MyConfig.TOKEN);
+    @RequestMapping("/resToken")
+    public R resToken(){
+        JSONObject cellphone = loginService.resToken();
         return R.data(cellphone);
     }
     /**
@@ -60,8 +58,7 @@ public class MusicKgApiController {
      */
     @RequestMapping("/userDetail")
     public R userDetail(){
-        JSONObject cellphone = userInfoService.userDetail();
-        return R.data(cellphone);
+        return R.data(loginService.userAccount());
     }
     /**
      * 领取vip
@@ -69,7 +66,53 @@ public class MusicKgApiController {
      */
     @RequestMapping("/youthDayVip")
     public R youthDayVip(){
-        JSONObject youthDayVip = vipService.youthDayVip();
+        JSONObject youthDayVip = loginService.youthDayVip();
         return R.data(youthDayVip);
     }
+    /**
+     * 搜索API
+     * @return json
+     */
+    @FastRedisReturnData(redisTime = 60 * 60 * 24 * 30)
+    @RequestMapping("/searchMusic")
+    public R searchMusic(@RequestParam String keywords){
+        JSONArray musicListRes = new JSONArray();
+
+        JSONObject searchMusic = loginService.searchMusic(keywords);
+//        循环获取音乐地址拼接处理
+        JSONArray musicList = searchMusic.getJSONObject("data").getJSONArray("lists");
+        for (Object object : musicList) {
+            JSONObject music = (JSONObject) object;
+            try {
+                String fileHash = music.getString("FileHash");
+                String sqFileHash = music.getString("SQFileHash");
+//                String hash = music.getJSONObject("HQ").getString("Hash");
+                String hash = StrUtil.isBlankIfStr(fileHash) ? sqFileHash : fileHash;
+                if (StrUtil.isBlankIfStr(hash)) {
+                    continue;
+                }
+                JSONObject songUrl = loginService.songUrl(hash);
+                JSONArray url = songUrl.getJSONArray("url");
+                if (StrUtil.isBlankIfStr(url.toJSONString())) {
+                    continue;
+                }
+                musicListRes.add(new JSONObject(){{
+//                填充图片
+                    put("image",music.getString("Image"));
+//                作者
+                    put("singerName",music.getString("SingerName"));
+//                音乐地址
+                    put("musicUrl",url);
+                }});
+            }catch (Exception e){
+                log.error("获取音乐信息失败");
+                log.info(music.toJSONString());
+                log.error(e.getMessage());
+            }
+        }
+
+        return R.data(musicListRes);
+    }
+
+
 }

@@ -30,6 +30,7 @@ public class MyException extends AbstractErrorController {
      */
     @ExceptionHandler(Exception.class)
     public R<Object> handler(Exception d) {
+        d.printStackTrace();
         return R.fail("系统异常，请联系管理员");
     }
 
