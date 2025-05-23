@@ -85,8 +85,18 @@ public class MusicWyyApiController {
                     put("name",music.getString("name"));
 //                填充图片
                     put("image",music.getString("Image"));
+                    String artistsName = "";
+                    String albumName = "";
+                    try {
 //                作者
-                    put("singerName",music.getString("SingerName"));
+                        artistsName = music.getJSONArray("artists").getJSONObject(0).getString("name");
+                        albumName = music.getJSONObject("album").getString("name");
+                        put("singerName", artistsName + albumName);
+                    }catch (Exception e1){
+                        log.error("获取作者失败");
+                        log.info(music.toJSONString());
+                        log.error(e1.getMessage());
+                    }
 //                音乐地址
                     put("musicUrl",jsonArray.getJSONObject(0).getString("url"));
                 }});
