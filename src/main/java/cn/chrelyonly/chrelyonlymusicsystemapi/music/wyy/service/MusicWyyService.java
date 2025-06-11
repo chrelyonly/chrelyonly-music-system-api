@@ -1,9 +1,9 @@
-package cn.chrelyonly.chrelyonlymusicsystemapi.wyy.service;
+package cn.chrelyonly.chrelyonlymusicsystemapi.music.wyy.service;
 
 
 import cn.chrelyonly.chrelyonlymusicsystemapi.util.SendRequest;
 import cn.chrelyonly.chrelyonlymusicsystemapi.util.RedisUtil;
-import cn.chrelyonly.chrelyonlymusicsystemapi.wyy.config.MyWyyConfig;
+import cn.chrelyonly.chrelyonlymusicsystemapi.music.wyy.config.MyWyyConfig;
 import cn.hutool.http.Method;
 import com.alibaba.fastjson2.JSONObject;
 import lombok.extern.slf4j.Slf4j;

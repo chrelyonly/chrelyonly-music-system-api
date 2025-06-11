@@ -1,6 +1,5 @@
-package cn.chrelyonly.chrelyonlymusicsystemapi.kg.config;
+package cn.chrelyonly.chrelyonlymusicsystemapi.music.kg.config;
 
-import cn.chrelyonly.chrelyonlymusicsystemapi.wyy.config.MyWyyConfig;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 

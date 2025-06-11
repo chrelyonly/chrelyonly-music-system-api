@@ -11,3 +11,5 @@ music:
     serviceUrl: "http://chrelyonly-wyy-music-system:3000"
   kg:
     serviceUrl: "http://chrelyonly-kg-music-system:3000"
+  qq:
+    serviceUrl: "http://chrelyonly-qq-music-system:3200"

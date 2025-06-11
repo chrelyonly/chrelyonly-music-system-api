@@ -1,6 +1,9 @@
-package cn.chrelyonly.chrelyonlymusicsystemapi.qq.service;
+package cn.chrelyonly.chrelyonlymusicsystemapi.music.qq.service;
 
 
+import cn.chrelyonly.chrelyonlymusicsystemapi.music.kg.config.MyKgConfig;
+import cn.chrelyonly.chrelyonlymusicsystemapi.music.qq.config.MyQqConfig;
+import cn.chrelyonly.chrelyonlymusicsystemapi.util.RedisUtil;
 import cn.chrelyonly.chrelyonlymusicsystemapi.util.SendRequest;
 import cn.hutool.http.Method;
 import com.alibaba.fastjson2.JSONObject;
@@ -16,7 +19,13 @@ import java.nio.charset.StandardCharsets;
 @Service
 @Slf4j
 public class MusicQqService {
-
+    /**
+     * 请求发送前置方法
+     */
+    public JSONObject prependSendRequest(String apiUrl,JSONObject body,Method method){
+        apiUrl = MyQqConfig.SERVICE_QQ_URL + apiUrl;
+        return SendRequest.sendRequest(apiUrl,body,  method);
+    }
     /**
      * 搜索音乐
      */
@@ -25,8 +34,7 @@ public class MusicQqService {
         // 拼接 URL 参数
         String path = "/getSearchByKey" +
                 "?key=" + URLEncoder.encode(key, StandardCharsets.UTF_8);
-        JSONObject responseBody = SendRequest.sendRequest(path, body, Method.GET);
-        log.info(responseBody.toJSONString());
+        JSONObject responseBody = prependSendRequest(path, body, Method.GET);
         return responseBody;
     }
     /**
@@ -37,8 +45,7 @@ public class MusicQqService {
         // 拼接 URL 参数
         String path = "/getMusicPlay" +
                 "?songmid=" + URLEncoder.encode(songmid, StandardCharsets.UTF_8);
-        JSONObject responseBody = SendRequest.sendRequest(path, body, Method.GET);
-        log.info(responseBody.toJSONString());
+        JSONObject responseBody = prependSendRequest(path, body, Method.GET);
         return responseBody;
     }
 }

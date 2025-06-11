@@ -1,9 +1,8 @@
-package cn.chrelyonly.chrelyonlymusicsystemapi.wyy.controller;
+package cn.chrelyonly.chrelyonlymusicsystemapi.music.wyy.controller;
 
 import cn.chrelyonly.chrelyonlymusicsystemapi.aop.FastRedisReturnData;
 import cn.chrelyonly.chrelyonlymusicsystemapi.component.R;
-import cn.chrelyonly.chrelyonlymusicsystemapi.wyy.service.MusicWyyService;
-import cn.hutool.core.util.StrUtil;
+import cn.chrelyonly.chrelyonlymusicsystemapi.music.wyy.service.MusicWyyService;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import lombok.RequiredArgsConstructor;

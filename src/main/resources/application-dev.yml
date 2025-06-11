@@ -11,3 +11,5 @@ music:
     serviceUrl: "http://127.0.0.1:3000"
   kg:
     serviceUrl: "http://127.0.0.1:3000"
+  qq:
+    serviceUrl: "http://127.0.0.1:3200"

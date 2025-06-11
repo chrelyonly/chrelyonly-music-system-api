@@ -1,6 +1,5 @@
-package cn.chrelyonly.chrelyonlymusicsystemapi.wyy.config;
+package cn.chrelyonly.chrelyonlymusicsystemapi.music.wyy.config;
 
-import cn.hutool.core.lang.Console;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 

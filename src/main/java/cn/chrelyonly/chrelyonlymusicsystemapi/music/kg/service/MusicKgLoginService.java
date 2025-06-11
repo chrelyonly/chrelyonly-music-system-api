@@ -1,7 +1,7 @@
-package cn.chrelyonly.chrelyonlymusicsystemapi.kg.service;
+package cn.chrelyonly.chrelyonlymusicsystemapi.music.kg.service;
 
 
-import cn.chrelyonly.chrelyonlymusicsystemapi.kg.config.MyKgConfig;
+import cn.chrelyonly.chrelyonlymusicsystemapi.music.kg.config.MyKgConfig;
 import cn.chrelyonly.chrelyonlymusicsystemapi.util.RedisUtil;
 import cn.chrelyonly.chrelyonlymusicsystemapi.util.SendRequest;
 import cn.hutool.http.Method;

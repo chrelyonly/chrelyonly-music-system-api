@@ -1,8 +1,7 @@
-package cn.chrelyonly.chrelyonlymusicsystemapi.kg.task;
+package cn.chrelyonly.chrelyonlymusicsystemapi.music.kg.task;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 /**

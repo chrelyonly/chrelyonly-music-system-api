@@ -1,8 +1,8 @@
-package cn.chrelyonly.chrelyonlymusicsystemapi.kg.controller;
+package cn.chrelyonly.chrelyonlymusicsystemapi.music.kg.controller;
 
 import cn.chrelyonly.chrelyonlymusicsystemapi.aop.FastRedisReturnData;
 import cn.chrelyonly.chrelyonlymusicsystemapi.component.R;
-import cn.chrelyonly.chrelyonlymusicsystemapi.kg.service.MusicKgLoginService;
+import cn.chrelyonly.chrelyonlymusicsystemapi.music.kg.service.MusicKgLoginService;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
