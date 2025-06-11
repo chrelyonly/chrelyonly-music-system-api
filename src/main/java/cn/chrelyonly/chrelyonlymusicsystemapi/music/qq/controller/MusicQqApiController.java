@@ -3,6 +3,7 @@ package cn.chrelyonly.chrelyonlymusicsystemapi.music.qq.controller;
 import cn.chrelyonly.chrelyonlymusicsystemapi.aop.FastRedisReturnData;
 import cn.chrelyonly.chrelyonlymusicsystemapi.component.R;
 import cn.chrelyonly.chrelyonlymusicsystemapi.music.qq.service.MusicQqService;
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +40,9 @@ public class MusicQqApiController {
                     String songmid = music.getString("songmid");
                     JSONObject songUrl = musicQqService.getMusicPlay(songmid);
                     String url = songUrl.getJSONObject("data").getJSONObject("playUrl").getJSONObject(songmid).getString("url");
+                    if (StrUtil.isBlankIfStr(url)){
+                        continue;
+                    }
                     musicListRes.add(new JSONObject() {{
                         put("musicName", music.getString("songname"));
                         put("musicUrl", url);
