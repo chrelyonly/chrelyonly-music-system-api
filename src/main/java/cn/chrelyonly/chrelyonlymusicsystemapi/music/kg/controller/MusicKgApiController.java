@@ -73,7 +73,7 @@ public class MusicKgApiController {
      * 搜索API
      * @return json
      */
-    @FastRedisReturnData(redisTime = 60 * 60 * 24 * 1)
+//    @FastRedisReturnData(redisTime = 60 * 60 * 24 * 1)
     @RequestMapping("/searchMusic")
     public R searchMusic(@RequestParam String keywords){
         JSONArray musicListRes = new JSONArray();
@@ -93,7 +93,7 @@ public class MusicKgApiController {
                 }
                 JSONObject songUrl = loginService.songUrl(hash);
                 JSONArray url = songUrl.getJSONArray("url");
-                if (StrUtil.isBlankIfStr(url.toJSONString())) {
+                if (url.isEmpty()) {
                     continue;
                 }
                 musicListRes.add(new JSONObject(){{
@@ -102,7 +102,11 @@ public class MusicKgApiController {
 //                作者
                     put("singerName",music.getString("SingerName"));
 //                音乐地址
-                    put("musicUrl",url);
+                    put("musicUrl",url.getString(0));
+//                音乐地址
+                    put("musicHash",hash);
+//                    音乐名称
+                    put("musicName",music.getString("OriSongName"));
                 }});
             }catch (Exception e){
                 log.error("获取音乐信息失败");
