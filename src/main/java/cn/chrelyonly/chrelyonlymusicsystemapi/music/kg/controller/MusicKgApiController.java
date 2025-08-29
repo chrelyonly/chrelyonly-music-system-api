@@ -73,7 +73,7 @@ public class MusicKgApiController {
      * 搜索API
      * @return json
      */
-    @FastRedisReturnData(redisTime = 60 * 60 * 24 * 1)
+//    @FastRedisReturnData(redisTime = 60 * 60 * 24 * 1)
     @RequestMapping("/searchMusic")
     public R searchMusic(@RequestParam String keywords){
         JSONArray musicListRes = new JSONArray();
@@ -96,6 +96,9 @@ public class MusicKgApiController {
                 if (url.isEmpty()) {
                     continue;
                 }
+
+//                尝试获取歌词
+                JSONObject songLyric = loginService.getSongLyric(hash);
                 musicListRes.add(new JSONObject(){{
 //                填充图片
                     put("image",music.getString("Image"));
@@ -105,6 +108,8 @@ public class MusicKgApiController {
                     put("musicUrl",url.getString(0));
 //                音乐地址
                     put("musicHash",hash);
+//                音乐歌词
+                    put("songLyric",songLyric.getString("decodeContent"));
 //                    音乐名称
                     put("musicName",music.getString("OriSongName"));
                 }});

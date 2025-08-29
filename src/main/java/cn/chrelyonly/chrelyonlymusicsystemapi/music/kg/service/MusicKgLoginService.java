@@ -5,6 +5,7 @@ import cn.chrelyonly.chrelyonlymusicsystemapi.music.kg.config.MyKgConfig;
 import cn.chrelyonly.chrelyonlymusicsystemapi.util.RedisUtil;
 import cn.chrelyonly.chrelyonlymusicsystemapi.util.SendRequest;
 import cn.hutool.http.Method;
+import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -201,5 +202,30 @@ public class MusicKgLoginService {
         String path = "/song/url" +
                 "?hash=" + URLEncoder.encode(hash, StandardCharsets.UTF_8);
         return prependSendRequest(path, body, Method.GET);
+    }
+
+    /**
+     * 获取歌词, 分两步
+     */
+    public JSONObject getSongLyric(String hash) {
+        JSONObject body = new JSONObject();
+        // 拼接 URL 参数
+        String path = "/search/lyric" +
+                "?hash=" + URLEncoder.encode(hash, StandardCharsets.UTF_8);
+        var lyricInfo = prependSendRequest(path, body, Method.GET);
+        if (lyricInfo.getInteger("status") == 200){
+            var candidates = lyricInfo.getJSONArray("candidates");
+            if (!candidates.isEmpty()){
+                var candidateInfo = candidates.getJSONObject(0);
+                JSONObject lyricBody = new JSONObject();
+                // 拼接 URL 参数
+                String lyricPath = "/lyric" +
+                        "?id=" + URLEncoder.encode(candidateInfo.getString("id"), StandardCharsets.UTF_8)
+                         + "&accesskey=" + URLEncoder.encode(candidateInfo.getString("accesskey"), StandardCharsets.UTF_8)
+                         + "&decode=true";
+                return prependSendRequest(lyricPath, lyricBody, Method.GET);
+            }
+        }
+        return new JSONObject();
     }
 }
