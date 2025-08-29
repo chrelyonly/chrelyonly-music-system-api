@@ -189,7 +189,7 @@ public class MusicKgLoginService {
         // 拼接 URL 参数
         String path = "/search" +
                 "?keywords=" + URLEncoder.encode(keywords, StandardCharsets.UTF_8) +
-                "&pagesize=15";
+                "&pagesize=20";
         return prependSendRequest(path, body, Method.GET);
     }
     /**
