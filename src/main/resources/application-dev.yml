@@ -1,10 +1,13 @@
 spring:
   data:
     redis:
+      ##redis 单机环境配置
+      host: ${chrelyonly.dev.host}
+      port: 16379
       password: 123456789
-      database: 1
-      host: 192.168.1.111
-      port: 6379
+      database: 6
+      ssl:
+        enabled: false
 
 music:
   wyy:

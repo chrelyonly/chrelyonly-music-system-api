@@ -1,3 +1,8 @@
+chrelyonly:
+  dev:
+    host: 172.16.0.114
+
+
 spring:
   application:
     name: chrelyonly-music-system-api
