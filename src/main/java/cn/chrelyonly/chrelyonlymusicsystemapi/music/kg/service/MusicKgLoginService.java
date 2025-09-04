@@ -222,6 +222,7 @@ public class MusicKgLoginService {
                 String lyricPath = "/lyric" +
                         "?id=" + URLEncoder.encode(candidateInfo.getString("id"), StandardCharsets.UTF_8)
                          + "&accesskey=" + URLEncoder.encode(candidateInfo.getString("accesskey"), StandardCharsets.UTF_8)
+                         + "&fmt=lrc"
                          + "&decode=true";
                 return prependSendRequest(lyricPath, lyricBody, Method.GET);
             }
