@@ -58,16 +58,23 @@ public class MusicKgApiController {
      */
     @RequestMapping("/userDetail")
     public R userDetail(){
-        return R.data(loginService.userAccount());
+        return loginService.userAccount();
     }
     /**
-     * 领取vip
+     * 领取vip  畅听 VIP
      * @return json
      */
     @RequestMapping("/youthDayVip")
     public R youthDayVip(){
-        JSONObject youthDayVip = loginService.youthDayVip();
-        return R.data(youthDayVip);
+        return loginService.youthDayVip();
+    }
+    /**
+     * 升级概念版VIP
+     * @return json
+     */
+    @RequestMapping("/upgradeYouthDayVip")
+    public R upgradeYouthDayVip(){
+        return loginService.upgradeYouthDayVip();
     }
     /**
      * 搜索API

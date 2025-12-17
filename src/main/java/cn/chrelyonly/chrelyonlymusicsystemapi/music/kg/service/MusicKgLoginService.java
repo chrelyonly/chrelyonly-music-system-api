@@ -160,11 +160,31 @@ public class MusicKgLoginService {
     /**
      * 领取vip 一天领取一次
      */
-    public JSONObject youthDayVip() {
+    public R youthDayVip() {
         JSONObject body = new JSONObject();
         // 拼接 URL 参数
         String path = "/youth/day/vip";
-        return prependSendRequest(path, body, Method.GET);
+        JSONObject jsonObject = prependSendRequest(path, body, Method.GET);
+//        判断领取状态
+        if (jsonObject.getInteger("status") == 1){
+            return R.success("领取成功");
+        }
+        return R.fail("领取失败");
+    }
+
+    /**
+     * 升级概念版VIP
+     */
+    public R upgradeYouthDayVip() {
+        JSONObject body = new JSONObject();
+        // 拼接 URL 参数
+        String path = "/youth/day/vip/upgrade";
+        JSONObject jsonObject = prependSendRequest(path, body, Method.GET);
+//        判断领取状态
+        if (jsonObject.getInteger("status") == 1){
+            return R.success("升级成功");
+        }
+        return R.fail("升级失败");
     }
 
     /**
