@@ -1,6 +1,7 @@
 package cn.chrelyonly.chrelyonlymusicsystemapi.music.kg.service;
 
 
+import cn.chrelyonly.chrelyonlymusicsystemapi.component.R;
 import cn.chrelyonly.chrelyonlymusicsystemapi.music.kg.config.MyKgConfig;
 import cn.chrelyonly.chrelyonlymusicsystemapi.util.RedisUtil;
 import cn.chrelyonly.chrelyonlymusicsystemapi.util.SendRequest;
@@ -68,50 +69,37 @@ public class MusicKgLoginService {
                 put("qrInfo",qrKeyObject);
             }};
         }
-//        生成二维码
-//        String createQr = "/login/qr/create" +
-//                "?key=" + URLEncoder.encode(qrKey, StandardCharsets.UTF_8) +
-//                "&qrimg=true";
-//        //        String qr = qrKeyObject.getJSONObject("data").getString("qrimg");
-//        JSONObject qrInfo = prependSendRequest(createQr, null, Method.GET);
-////        如何二维码信息没问题则把key单独返回
-//        if (qrInfo.getInteger("code") == 200){
-//            qrInfo.put("qrKey", qrKey);
-////            保存二维码key,方便登录
-//            RedisUtil.setObjectStatic(KEY,qrKey,120);
-//            return qrInfo;
-//        }else {
-//            return new JSONObject(){{
-//                put("message", "错误的二维码信息");
-//                put("qrInfo",qrInfo);
-//            }};
-//        }
     }
 
     /**
      * 检查登录
      */
-    public Object loginCheck() {
+    public R loginCheck() {
         var keyStatic = RedisUtil.hasKeyStatic(COOKIE_KEY);
         if (keyStatic){
-            return new JSONObject(){{
-                put("code", 201);
-                put("message", "当前已经登录");
-            }};
+            return R.fail("当前已经登录过");
         }
         var qrKeyFlag = RedisUtil.hasKeyStatic(KEY);
         if (!qrKeyFlag){
-            return new JSONObject(){{
-                put("code", 500);
-                put("message", "请先扫描二维码后在登陆");
-            }};
+            return R.fail("请先扫描二维码后在登陆");
         }
 //        检查登录
         String loginQr = "/login/qr/check" +
                 "?key=" + URLEncoder.encode((String) RedisUtil.getKey(KEY), StandardCharsets.UTF_8);
         JSONObject response = prependSendRequest(loginQr, null, Method.GET);
-//        判断是否登录成功 803是登陆成功
+//        判断是否登录成功
         if (response.getInteger("status") == 1){
+            JSONObject dataObject = response.getJSONObject("data");
+//            0 为二维码过期，1 为等待扫码，2 为待确认，4 为授权登录成功（4 状态码下会返回 token）
+            if (dataObject.getInteger("status") == 0) {
+                return R.fail("二维码过期");
+            }
+            if (dataObject.getInteger("status") == 1) {
+                return R.fail("等待扫码");
+            }
+            if (dataObject.getInteger("status") == 2) {
+                return R.fail("扫码确认");
+            }
 //            将登录信息存入到redis中  存一年
             RedisUtil.setObjectStatic(COOKIE_KEY,response.toJSONString(),60 * 60 * 24 * 30 * 12);
 //           删除上一次的登录用户信息
@@ -120,26 +108,23 @@ public class MusicKgLoginService {
             resToken();
             return userAccount();
         }
-        return response;
+        return R.fail("登陆失败");
     }
 
 
     /**
      * 获取登录用户详情
      */
-    public Object userAccount() {
+    public R userAccount() {
         var keyStatic = RedisUtil.hasKeyStatic(COOKIE_KEY);
         if (!keyStatic){
-            return new JSONObject(){{
-                put("code", 500);
-                put("message", "未登录");
-            }};
+            return R.fail("未登录");
         }
-        var userInfo = RedisUtil.hasKeyStatic(USER_INFO_KEY);
-        if (userInfo){
-            log.info("当前存在登录信息");
-            return  RedisUtil.getKey(USER_INFO_KEY);
-        }
+//        var userInfo = RedisUtil.hasKeyStatic(USER_INFO_KEY);
+//        if (userInfo){
+//            log.info("当前存在登录信息");
+//            return R.data(RedisUtil.getKey(USER_INFO_KEY));
+//        }
         String userAccount = "/user/detail";
         JSONObject userAccountInfo = prependSendRequest(userAccount, null, Method.GET);
         if (userAccountInfo.getInteger("status") == 1) {
@@ -150,7 +135,7 @@ public class MusicKgLoginService {
 //            登录成功则缓存信息 1天
             RedisUtil.setObjectStatic(USER_INFO_KEY,userAccountInfo,60 * 60 * 24 * 30 * 12);
         }
-        return userAccountInfo;
+        return R.data(userAccountInfo);
     }
     /**
      * 3.刷新登录 调用此接口，可刷新登录状态，可以延长 token 过期时间

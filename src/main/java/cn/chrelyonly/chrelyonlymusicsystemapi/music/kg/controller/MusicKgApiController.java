@@ -38,7 +38,7 @@ public class MusicKgApiController {
      */
     @RequestMapping("/loginCheck")
     public R loginCheck(){
-        return R.data(loginService.loginCheck());
+        return loginService.loginCheck();
     }
 
 
