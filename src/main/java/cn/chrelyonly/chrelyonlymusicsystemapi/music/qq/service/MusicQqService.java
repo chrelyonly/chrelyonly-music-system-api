@@ -29,23 +29,23 @@ public class MusicQqService {
     /**
      * 搜索音乐
      */
-    public JSONObject getSearchByKey(String key) {
+    public JSONObject getSearchByKey(String key,JSONObject headers) {
         JSONObject body = new JSONObject();
         // 拼接 URL 参数
-        String path = "/getSearchByKey" +
-                "?key=" + URLEncoder.encode(key, StandardCharsets.UTF_8);
-        JSONObject responseBody = prependSendRequest(path, body, Method.GET);
-        return responseBody;
+        String path = "/search";
+        body.put("keywords",key);
+        body.put("headers",headers);
+        return prependSendRequest(path, body, Method.POST);
     }
     /**
      * 获取音乐信息
      */
-    public JSONObject getMusicPlay(String songmid) {
+    public JSONObject getMusicPlay(String mid,JSONObject headers) {
         JSONObject body = new JSONObject();
         // 拼接 URL 参数
-        String path = "/getMusicPlay" +
-                "?songmid=" + URLEncoder.encode(songmid, StandardCharsets.UTF_8);
-        JSONObject responseBody = prependSendRequest(path, body, Method.GET);
-        return responseBody;
+        String path = "/detail";
+        body.put("mid",mid);
+        body.put("headers",headers);
+        return prependSendRequest(path, body, Method.POST);
     }
 }

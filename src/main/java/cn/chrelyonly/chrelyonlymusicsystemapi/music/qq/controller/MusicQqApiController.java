@@ -2,8 +2,11 @@ package cn.chrelyonly.chrelyonlymusicsystemapi.music.qq.controller;
 
 import cn.chrelyonly.chrelyonlymusicsystemapi.aop.FastRedisReturnData;
 import cn.chrelyonly.chrelyonlymusicsystemapi.component.R;
+import cn.chrelyonly.chrelyonlymusicsystemapi.config.MyMusicConfig;
 import cn.chrelyonly.chrelyonlymusicsystemapi.music.qq.service.MusicQqService;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.http.HttpRequest;
+import cn.hutool.http.HttpResponse;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import lombok.RequiredArgsConstructor;
@@ -28,43 +31,26 @@ public class MusicQqApiController {
      */
     @FastRedisReturnData(redisTime = 60 * 60 * 24 * 1)
     @RequestMapping("/searchMusic")
-    public R searchMusic(@RequestParam String keywords){
+    public R searchMusic(@RequestParam String keywords, Integer userCode){
         JSONArray musicListRes = new JSONArray();
-
-        JSONObject searchMusic = musicQqService.getSearchByKey(keywords);
+        if (userCode == null){
+            userCode = 1;
+        }
+        JSONObject headers = new JSONObject();
+//        用用户token获取登录信息
+        // 发送请求
+        String body;
+        try (HttpResponse response = HttpRequest.get(MyMusicConfig.API_PROJECT_SERVER_URL + "/music-api/getUserInfo?userCode=" + userCode)
+                .execute()) {
+            // 获取响应体
+            body = response.body();
+            // 转换为json
+            JSONObject jsonObject = JSONObject.parseObject(body);
+            headers.put("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36");
+            headers.put("cookie",jsonObject.getString("token"));
+        }
+        JSONObject searchMusic = musicQqService.getSearchByKey(keywords,headers);
         try {
-            JSONArray jsonArray = searchMusic.getJSONObject("response").getJSONObject("data").getJSONObject("song").getJSONArray("list");
-            for (Object object : jsonArray) {
-                JSONObject music = (JSONObject) object;
-                try {
-                    String songmid = music.getString("songmid");
-                    JSONObject songUrl = musicQqService.getMusicPlay(songmid);
-                    String url = songUrl.getJSONObject("data").getJSONObject("playUrl").getJSONObject(songmid).getString("url");
-                    if (StrUtil.isBlankIfStr(url)){
-                        continue;
-                    }
-                    musicListRes.add(new JSONObject() {{
-                        put("musicName", music.getString("songname"));
-                        put("musicUrl", url);
-                        try {
-//                作者
-                            JSONArray singerList = music.getJSONArray("singer");
-                            for (Object singerInfo : singerList) {
-                                JSONObject  singer = (JSONObject) singerInfo;
-                                put("singerName", singer.getString("name"));
-                            }
-                        }catch (Exception e1){
-                            log.error("获取作者失败");
-                            log.info(music.toJSONString());
-                            log.error(e1.getMessage());
-                        }
-                    }});
-                } catch (Exception e) {
-                    log.error("获取音乐地址失败");
-                    log.info(music.toJSONString());
-                    log.error(e.getMessage());
-                }
-            }
         }catch (Exception e){
             log.error("获取音乐信息失败");
             log.info(searchMusic.toJSONString());
@@ -73,23 +59,4 @@ public class MusicQqApiController {
         return R.data(musicListRes);
     }
 
-
-
-    /**
-     * 搜索API
-     * @return json
-     */
-    @RequestMapping("/getSearchByKey")
-    public R searchList(@RequestParam String key){
-        return R.data(musicQqService.getSearchByKey(key));
-    }
-
-    /**
-     * 音乐信息
-     * @return json
-     */
-    @RequestMapping("/getMusicPlay")
-    public R getMusicPlay(@RequestParam String songmid){
-        return R.data(musicQqService.getMusicPlay(songmid));
-    }
 }
