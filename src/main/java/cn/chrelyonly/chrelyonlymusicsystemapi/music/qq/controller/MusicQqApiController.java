@@ -47,18 +47,20 @@ public class MusicQqApiController {
             JSONObject jsonObject = JSONObject.parseObject(body);
             headers.put("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36");
             headers.put("cookie",jsonObject.getJSONObject("data").getString("token"));
-        }
-        JSONObject searchMusicRes = musicQqService.getSearchByKey(keywords,headers);
-        if (searchMusicRes.getInteger("code") == 200){
-            JSONArray musicList = searchMusicRes.getJSONArray("data");
-            for (int i = 0; i < musicList.size(); i++) {
-                JSONObject item =  musicList.getJSONObject(i);
-                JSONObject musicPlay = musicQqService.getMusicPlay(item.getString("mid"), headers);
-                item.put("musicPlay", musicPlay);
+
+            JSONObject searchMusicRes = musicQqService.getSearchByKey(keywords,headers);
+            if (searchMusicRes.getInteger("code") == 200){
+                JSONArray musicList = searchMusicRes.getJSONArray("data");
+                for (int i = 0; i < musicList.size(); i++) {
+                    JSONObject item =  musicList.getJSONObject(i);
+                    JSONObject musicPlay = musicQqService.getMusicPlay(item.getString("mid"), headers);
+                    item.put("musicPlay", musicPlay);
+                    item.put("musicFrom", jsonObject.getString("name"));
+                }
+                return R.data(musicList);
+            }else{
+                return R.fail("从QQ音乐插件获取数据异常");
             }
-            return R.data(musicList);
-        }else{
-            return R.fail("从QQ音乐插件获取数据异常");
         }
     }
 
