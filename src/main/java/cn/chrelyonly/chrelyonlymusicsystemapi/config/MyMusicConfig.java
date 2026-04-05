@@ -15,7 +15,7 @@ public class MyMusicConfig {
     //    服务器地址
     public static String API_PROJECT_SERVER_URL;
 
-    @Value("${apiProject.serviceUrl}")
+    @Value("${apiProject.api.serviceUrl}")
     public void setServiceUrl(String serviceUrl) {
         log.info("初始化api-project插件");
         MyMusicConfig.API_PROJECT_SERVER_URL = serviceUrl;

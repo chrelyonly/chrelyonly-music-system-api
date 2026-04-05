@@ -32,7 +32,6 @@ public class MusicQqApiController {
     @FastRedisReturnData(redisTime = 60 * 60 * 24 * 1)
     @RequestMapping("/searchMusic")
     public R searchMusic(@RequestParam String keywords, Integer userCode){
-        JSONArray musicListRes = new JSONArray();
         if (userCode == null){
             userCode = 1;
         }
@@ -47,16 +46,20 @@ public class MusicQqApiController {
             // 转换为json
             JSONObject jsonObject = JSONObject.parseObject(body);
             headers.put("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36");
-            headers.put("cookie",jsonObject.getString("token"));
+            headers.put("cookie",jsonObject.getJSONObject("data").getString("token"));
         }
-        JSONObject searchMusic = musicQqService.getSearchByKey(keywords,headers);
-        try {
-        }catch (Exception e){
-            log.error("获取音乐信息失败");
-            log.info(searchMusic.toJSONString());
-            log.error(e.getMessage());
+        JSONObject searchMusicRes = musicQqService.getSearchByKey(keywords,headers);
+        if (searchMusicRes.getInteger("code") == 200){
+            JSONArray musicList = searchMusicRes.getJSONArray("data");
+            for (int i = 0; i < musicList.size(); i++) {
+                JSONObject item =  musicList.getJSONObject(i);
+                JSONObject musicPlay = musicQqService.getMusicPlay(item.getString("mid"), headers);
+                item.put("musicPlay", musicPlay);
+            }
+            return R.data(musicList);
+        }else{
+            return R.fail("从QQ音乐插件获取数据异常");
         }
-        return R.data(musicListRes);
     }
 
 }
