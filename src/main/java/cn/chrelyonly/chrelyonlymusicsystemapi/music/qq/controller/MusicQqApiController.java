@@ -31,7 +31,7 @@ public class MusicQqApiController {
      */
     @FastRedisReturnData(redisTime = 60 * 60 * 24 * 1)
     @RequestMapping("/searchMusic")
-    public R searchMusic(@RequestParam String keywords, String userCode){
+    public R searchMusic(@RequestParam String keywords,@RequestParam(required = false)  String userCode){
         if (StrUtil.isEmptyIfStr(userCode)){
             userCode = "1";
         }
