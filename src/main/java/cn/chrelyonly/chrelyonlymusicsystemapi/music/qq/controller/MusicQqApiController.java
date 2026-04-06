@@ -29,10 +29,11 @@ public class MusicQqApiController {
      * 搜索API
      * @return json
      */
+    @FastRedisReturnData(redisTime = 60 * 60 * 24 * 1)
     @RequestMapping("/searchMusic")
-    public R searchMusic(@RequestParam String keywords, Integer userCode){
-        if (userCode == null){
-            userCode = 1;
+    public R searchMusic(@RequestParam String keywords, String userCode){
+        if (StrUtil.isEmptyIfStr(userCode)){
+            userCode = "1";
         }
         JSONObject headers = new JSONObject();
 //        用用户token获取登录信息
