@@ -29,7 +29,6 @@ public class MusicQqApiController {
      * 搜索API
      * @return json
      */
-    @FastRedisReturnData(redisTime = 60 * 60 * 24 * 1)
     @RequestMapping("/searchMusic")
     public R searchMusic(@RequestParam String keywords, Integer userCode){
         if (userCode == null){
