@@ -45,6 +45,9 @@ public class MusicQqApiController {
             body = response.body();
             // 转换为json
             JSONObject jsonObject = JSONObject.parseObject(body);
+            if (!jsonObject.getBoolean("success")){
+                return R.fail("用户信息异常," + jsonObject.getString("msg"));
+            }
             headers.put("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36");
             headers.put("cookie",jsonObject.getJSONObject("data").getString("token"));
 
@@ -55,7 +58,7 @@ public class MusicQqApiController {
                     JSONObject item =  musicList.getJSONObject(i);
                     JSONObject musicPlay = musicQqService.getMusicPlay(item.getString("mid"), headers);
                     item.put("musicPlay", musicPlay);
-                    item.put("musicFrom", jsonObject.getString("name"));
+                    item.put("musicFrom", jsonObject.getJSONObject("data").getString("name"));
                 }
                 return R.data(musicList);
             }else{
