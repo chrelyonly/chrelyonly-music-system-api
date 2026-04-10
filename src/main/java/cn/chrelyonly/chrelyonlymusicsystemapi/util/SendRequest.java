@@ -32,7 +32,7 @@ public class SendRequest {
             e.printStackTrace();
             return new JSONObject(){{
                 put("msg", "请求失败");
-                put("ret", 500);
+                put("code", 500);
             }};
         }
     }
