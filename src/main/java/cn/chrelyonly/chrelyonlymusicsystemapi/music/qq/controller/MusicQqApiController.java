@@ -1,9 +1,9 @@
 package cn.chrelyonly.chrelyonlymusicsystemapi.music.qq.controller;
 
-import cn.chrelyonly.chrelyonlymusicsystemapi.aop.FastRedisReturnData;
 import cn.chrelyonly.chrelyonlymusicsystemapi.component.R;
 import cn.chrelyonly.chrelyonlymusicsystemapi.config.MyMusicConfig;
 import cn.chrelyonly.chrelyonlymusicsystemapi.music.qq.service.MusicQqService;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
@@ -29,7 +29,7 @@ public class MusicQqApiController {
      * 搜索API
      * @return json
      */
-    @FastRedisReturnData(redisTime = 60 * 60 * 24 * 1)
+//    @FastRedisReturnData(redisTime = 60 * 60 * 24 * 1)
     @RequestMapping("/searchMusic")
     public R searchMusic(@RequestParam String keywords,@RequestParam(required = false)  String userCode){
         if (StrUtil.isEmptyIfStr(userCode)){
@@ -41,28 +41,33 @@ public class MusicQqApiController {
         String body;
         try (HttpResponse response = HttpRequest.get(MyMusicConfig.API_PROJECT_SERVER_URL + "/music-api/getUserInfo?userCode=" + userCode)
                 .execute()) {
-            // 获取响应体
-            body = response.body();
             // 转换为json
-            JSONObject jsonObject = JSONObject.parseObject(body);
-            if (!jsonObject.getBoolean("success")){
-                return R.fail("用户信息异常," + jsonObject.getString("msg"));
+            JSONObject musicUserInfo = JSONObject.parseObject(response.body());
+            if (!musicUserInfo.getBoolean("success")){
+                return R.fail("用户信息异常," + musicUserInfo.getString("msg"));
             }
-            headers.put("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36");
-            headers.put("cookie",jsonObject.getJSONObject("data").getString("token"));
+            headers.put("musicid",musicUserInfo.getJSONObject("data").getJSONObject("token").getString("musicid"));
+            headers.put("musickey",musicUserInfo.getJSONObject("data").getJSONObject("token").getString("musickey"));
 
             JSONObject searchMusicRes = musicQqService.getSearchByKey(keywords,headers);
             if (searchMusicRes.getInteger("code") == 200){
                 JSONArray musicList = searchMusicRes.getJSONArray("data");
                 for (int i = 0; i < musicList.size(); i++) {
                     JSONObject item =  musicList.getJSONObject(i);
-                    JSONObject musicPlay = musicQqService.getMusicPlay(item.getString("mid"), headers);
-                    item.put("musicPlay", musicPlay);
-                    item.put("musicFrom", jsonObject.getJSONObject("data").getString("name"));
+                    try {
+                        JSONObject musicFrom = new JSONObject();
+                        musicFrom.put("name",musicUserInfo.getJSONObject("data").getString("name"));
+                        musicFrom.put("expired_at", DateUtil.format(DateUtil.date(musicUserInfo.getJSONObject("data").getJSONObject("token").getLong("expired_at") * 1000),"yyyy-MM-dd HH:mm:ss"));
+                        item.put("musicFrom", musicFrom);
+                    } catch (Exception e) {
+                        item.put("musicFrom", new JSONObject(){{
+                            put("name","获取用户态异常");
+                        }});
+                    }
                 }
                 return R.data(musicList);
             }else{
-                return R.fail("从QQ音乐插件获取数据异常");
+                return R.fail("从QQ音乐插件获取数据异常" + searchMusicRes.getString("msg"));
             }
         }
     }

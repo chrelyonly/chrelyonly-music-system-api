@@ -1,6 +1,5 @@
 package cn.chrelyonly.chrelyonlymusicsystemapi;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -8,7 +7,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 /**
  * @author 11725
@@ -24,9 +22,14 @@ public static void main(String[] args) {
     SpringApplication app = new SpringApplication(ChrelyonlyMusicSystemApiApplication.class);
 
     // 获取命令行传递的 spring.profiles.active
-    String profile = System.getProperty("spring.profiles.active");
-    if (profile == null) {
-        profile = "dev"; // 默认值
+    // 默认环境
+    String profile = "dev";
+    // 从启动参数读取
+    for (String arg : args) {
+        if (arg.startsWith("--spring.profiles.active=")) {
+            profile = arg.substring("--spring.profiles.active=".length());
+            break;
+        }
     }
 
     // 设置 Nacos 配置
