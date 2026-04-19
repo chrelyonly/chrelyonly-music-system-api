@@ -1,5 +1,6 @@
 package cn.chrelyonly.chrelyonlymusicsystemapi.music.qq.controller;
 
+import cn.chrelyonly.chrelyonlymusicsystemapi.aop.FastRedisReturnData;
 import cn.chrelyonly.chrelyonlymusicsystemapi.component.R;
 import cn.chrelyonly.chrelyonlymusicsystemapi.config.MyMusicConfig;
 import cn.chrelyonly.chrelyonlymusicsystemapi.music.qq.service.MusicQqService;
@@ -29,7 +30,7 @@ public class MusicQqApiController {
      * 搜索API
      * @return json
      */
-//    @FastRedisReturnData(redisTime = 60 * 60 * 24 * 1)
+    @FastRedisReturnData(redisTime = 60 * 60 * 24 * 1)
     @RequestMapping("/searchMusic")
     public R searchMusic(@RequestParam String keywords,@RequestParam(required = false)  String userCode){
         if (StrUtil.isEmptyIfStr(userCode)){
@@ -38,7 +39,6 @@ public class MusicQqApiController {
         JSONObject headers = new JSONObject();
 //        用用户token获取登录信息
         // 发送请求
-        String body;
         try (HttpResponse response = HttpRequest.get(MyMusicConfig.API_PROJECT_SERVER_URL + "/music-api/getUserInfo?userCode=" + userCode)
                 .execute()) {
             // 转换为json
