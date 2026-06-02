@@ -2,7 +2,6 @@ package cn.chrelyonly.chrelyonlymusicsystemapi.task;
 
 
 import cn.chrelyonly.chrelyonlymusicsystemapi.music.kg.service.MusicKgLoginService;
-import com.alibaba.fastjson2.JSONObject;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -21,8 +20,17 @@ public class MyTask {
      */
     @Scheduled(cron = "01 01 * * * *")
     public void TaskKgToken(){
-        log.info("定时刷新微信token");
-        JSONObject jsonObject = musicKgLoginService.resToken();
-        log.info(jsonObject.toJSONString());
+        log.info("定时刷新酷狗token");
+        musicKgLoginService.resToken();
+    }
+
+    /**
+     * 自动签到升级VIP 酷狗
+     */
+    @Scheduled(cron = "01 01 08 * * *")
+    public void upVip(){
+        log.info("定时领取升级酷狗VIP");
+        musicKgLoginService.youthDayVip();
+        musicKgLoginService.upgradeYouthDayVip();
     }
 }

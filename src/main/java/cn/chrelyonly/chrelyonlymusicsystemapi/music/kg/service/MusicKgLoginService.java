@@ -5,14 +5,15 @@ import cn.chrelyonly.chrelyonlymusicsystemapi.component.R;
 import cn.chrelyonly.chrelyonlymusicsystemapi.music.kg.config.MyKgConfig;
 import cn.chrelyonly.chrelyonlymusicsystemapi.util.RedisUtil;
 import cn.chrelyonly.chrelyonlymusicsystemapi.util.SendRequest;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.http.Method;
-import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Date;
 
 /**
  * @author 11725
@@ -162,6 +163,7 @@ public class MusicKgLoginService {
      */
     public R youthDayVip() {
         JSONObject body = new JSONObject();
+        body.put("receive_day", DateUtil.format(new Date(),"yyyy-MM-dd"));
         // 拼接 URL 参数
         String path = "/youth/day/vip";
         JSONObject jsonObject = prependSendRequest(path, body, Method.GET);
